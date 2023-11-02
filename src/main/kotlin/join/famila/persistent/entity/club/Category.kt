@@ -6,8 +6,8 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.Table
 
 @Embeddable
-@Table(name = "category")
-class CategoryEntity(
+@Table
+class Category(
     @Enumerated(STRING)
     val tag: Tag,
 )

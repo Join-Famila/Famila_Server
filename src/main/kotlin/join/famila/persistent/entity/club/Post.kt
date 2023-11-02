@@ -1,23 +1,28 @@
 package join.famila.persistent.entity.club
 
 import jakarta.persistence.*
+import jakarta.persistence.GenerationType.*
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 
 @Entity
-@Table(name = "picture")
-class PictureEntity(
+@Table
+class Post(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     val id: Long = 0,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
-    val club: ClubEntity,
+    val club: Club,
 
     val memberId: Long,
 
-    val link: String,
+    val title: String,
+
+    val content: String,
+
+    val isNotification: Boolean,
 
     val createdAt: LocalDateTime = now(),
 
