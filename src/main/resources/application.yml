@@ -20,3 +20,8 @@ spring:
     url: ${MYSQL_URL}
     user: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
+  data:
+    mongodb:
+      host: ${MONGODB_HOST}
+      port: 27017
+      database: famila
