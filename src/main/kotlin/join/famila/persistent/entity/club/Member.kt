@@ -7,9 +7,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
 import org.springframework.data.annotation.CreatedDate
-import org.springframework.data.annotation.LastModifiedDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 
@@ -27,7 +25,4 @@ class Member(
 
     @CreatedDate
     val createdAt: LocalDateTime = now(),
-
-    @LastModifiedDate
-    val deletedAt: LocalDateTime? = null,
 )
