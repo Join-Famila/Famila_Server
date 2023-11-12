@@ -8,11 +8,12 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 
 @Entity
-@Table
 class Post(
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -24,15 +25,17 @@ class Post(
 
     val memberId: Long,
 
-    val title: String,
+    var title: String,
 
-    val content: String,
+    var content: String,
 
-    val isNotification: Boolean,
+    var isNotification: Boolean,
 
+    @CreatedDate
     val createdAt: LocalDateTime = now(),
 
-    val updatedAt: LocalDateTime? = null,
+    @LastModifiedDate
+    var updatedAt: LocalDateTime? = null,
 
-    val deletedAt: LocalDateTime? = null,
+    var deletedAt: LocalDateTime? = null,
 )

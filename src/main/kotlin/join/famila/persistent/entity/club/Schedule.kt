@@ -8,11 +8,11 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import org.springframework.data.annotation.CreatedDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 
 @Entity
-@Table
 class Schedule(
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -30,5 +30,6 @@ class Schedule(
 
     val location: String,
 
+    @CreatedDate
     val createdAt: LocalDateTime = now(),
 )

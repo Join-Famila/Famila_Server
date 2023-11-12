@@ -10,11 +10,12 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 
 @Entity
-@Table
 class Club(
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -31,7 +32,7 @@ class Club(
     val posts: List<Post> = listOf(),
 
     @OneToMany(mappedBy = "club", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val pictures: List<Picture> = listOf(),
+    var pictures: List<Picture> = listOf(),
 
     @OneToMany(mappedBy = "club", cascade = [CascadeType.ALL], orphanRemoval = true)
     val schedules: List<Schedule> = listOf(),
@@ -43,8 +44,10 @@ class Club(
     @ElementCollection
     val categories: List<Category> = listOf(),
 
+    @CreatedDate
     val createdAt: LocalDateTime = now(),
 
+    @LastModifiedDate
     val updatedAt: LocalDateTime? = null,
 
     val deletedAt: LocalDateTime? = null,
