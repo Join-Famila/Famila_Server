@@ -1,4 +1,4 @@
-package join.famila.persistent.entity.club
+package join.famila.club.infrastructure
 
 enum class Tag(description: String) {
     HEALTH("헬스"),

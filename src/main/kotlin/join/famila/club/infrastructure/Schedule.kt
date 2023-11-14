@@ -1,4 +1,4 @@
-package join.famila.persistent.entity.club
+package join.famila.club.infrastructure
 
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
