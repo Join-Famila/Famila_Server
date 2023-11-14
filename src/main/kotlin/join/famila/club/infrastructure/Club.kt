@@ -7,7 +7,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
@@ -19,6 +18,8 @@ class Club(
     @Id
     @GeneratedValue(strategy = IDENTITY)
     val id: Long = 0,
+
+    val name: String,
 
     val introduce: String,
 
@@ -34,10 +35,7 @@ class Club(
     @OneToMany(mappedBy = "club", cascade = [CascadeType.ALL], orphanRemoval = true)
     val schedules: List<Schedule> = listOf(),
 
-    @CollectionTable(
-        name = "category",
-        joinColumns = [JoinColumn(name = "club_id", referencedColumnName = "category_id")],
-    )
+    @CollectionTable
     @ElementCollection
     val categories: List<Category> = listOf(),
 
