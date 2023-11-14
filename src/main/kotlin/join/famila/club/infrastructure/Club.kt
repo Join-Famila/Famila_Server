@@ -9,19 +9,16 @@ import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
-import jakarta.persistence.Table
-import org.springframework.data.annotation.CreatedDate
-import org.springframework.data.annotation.LastModifiedDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
 
 @Entity
 class Club(
     @Id
     @GeneratedValue(strategy = IDENTITY)
     val id: Long = 0,
-
-    val leaderId: Long,
 
     val introduce: String,
 
