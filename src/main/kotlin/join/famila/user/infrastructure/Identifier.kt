@@ -8,9 +8,7 @@ class Identifier(
 
     val uid: String,
 ) {
-    override fun hashCode(): Int {
-        return (provider + uid).hashCode()
-    }
+    override fun hashCode() = (provider + uid).hashCode()
 
     override fun equals(other: Any?): Boolean {
         if (other is Identifier) {
