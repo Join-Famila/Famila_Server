@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 
@@ -36,7 +37,7 @@ class User(
     @Embedded
     val location: Location,
 
-    val age: Int,
+    val birthDay: LocalDate,
 
     val introduce: String,
 
