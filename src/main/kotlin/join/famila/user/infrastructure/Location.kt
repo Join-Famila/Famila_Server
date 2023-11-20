@@ -7,7 +7,7 @@ import java.math.BigDecimal
 class Location(
     val address: String,
 
-    val latitude: BigDecimal,   //위도
+    val latitude: BigDecimal,
 
-    val longitude: BigDecimal,  //경도
+    val longitude: BigDecimal,
 )
