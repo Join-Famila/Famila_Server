@@ -1,8 +1,11 @@
 package join.famila.user.controller
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import join.famila.club.infrastructure.Category
-import join.famila.club.infrastructure.Tag
+import join.famila.club.infrastructure.Tag.BIKING
+import join.famila.club.infrastructure.Tag.GOLF
+import join.famila.club.infrastructure.Tag.MEDITATION
 import join.famila.user.controller.data.Gender.*
 import join.famila.user.controller.data.LocationResponse
 import join.famila.user.controller.data.SignInRequest
@@ -25,6 +28,7 @@ import java.time.LocalDate
 class UserController {
     @GetMapping("me")
     @ResponseStatus(OK)
+    @Tag(name = "로그인 사용자 정보 가져오는 API", description = "헤더로 전달 받은 Authentication 값을 바탕으로 사용자 정보를 가져옴")
     fun getMe(principal: Principal): UserResponse {
         return UserResponse(
             id = 1,
@@ -40,15 +44,17 @@ class UserController {
             birthDay = LocalDate.of(1991, 9, 25),
             introduce = "안녕하세요. 자기소개 입니다.",
             categories = setOf(
-                Category(tag = Tag.BIKING),
-                Category(tag = Tag.GOLF),
-                Category(tag = Tag.MEDITATION),
+                Category(tag = BIKING),
+                Category(tag = GOLF),
+                Category(tag =
+                MEDITATION),
             ),
         )
     }
 
     @PostMapping("signIn")
     @ResponseStatus(OK)
+    @Tag(name = "로그인 API", description = "헤더로 Authentication, refreshToken과 사용자 정보를 전달")
     fun signIn(
         @RequestBody signInRequest: SignInRequest,
         httpServletResponse: HttpServletResponse,
@@ -70,15 +76,16 @@ class UserController {
             birthDay = LocalDate.of(1991, 9, 25),
             introduce = "안녕하세요. 자기소개 입니다.",
             categories = setOf(
-                Category(tag = Tag.BIKING),
-                Category(tag = Tag.GOLF),
-                Category(tag = Tag.MEDITATION),
+                Category(tag = BIKING),
+                Category(tag = GOLF),
+                Category(tag = MEDITATION),
             ),
         )
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
+    @Tag(name = "회원가입 API", description = "헤더로 Authentication, refreshToken과 사용자 정보를 전달")
     fun signUp(
         @RequestBody signUpRequest: SignUpRequest,
         httpServletResponse: HttpServletResponse,
