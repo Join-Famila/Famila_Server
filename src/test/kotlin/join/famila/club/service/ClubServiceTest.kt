@@ -2,6 +2,7 @@ package join.famila.club.service
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import jakarta.transaction.TransactionScoped
 import join.famila.club.infrastructure.Category
 import join.famila.club.infrastructure.ClubRepository
 import join.famila.club.infrastructure.MemberRepository
@@ -30,13 +31,14 @@ class ClubServiceTest(
         )
 
         When("모임을 생성한다면") {
-            val club = clubService.create(request)
+            clubService.create(request)
 
             Then("정상적으로 모임이 생성된다.") {
                 val clubs = clubRepository.findAll()
 
                 clubs.size shouldBe 1
                 clubs[0].members[0].userId shouldBe 1
+                clubs[0].categories.size shouldBe 2
             }
         }
     }
