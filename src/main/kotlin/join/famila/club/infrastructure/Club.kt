@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType
 import jakarta.persistence.CollectionTable
 import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType.EAGER
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
@@ -23,20 +24,20 @@ class Club(
 
     val introduce: String,
 
-    @OneToMany(mappedBy = "club", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "club", fetch = EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     val members: List<Member> = listOf(),
 
-    @OneToMany(mappedBy = "club", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "club", fetch = EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     val posts: List<Post> = listOf(),
 
-    @OneToMany(mappedBy = "club", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "club", fetch = EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     var pictures: List<Picture> = listOf(),
 
-    @OneToMany(mappedBy = "club", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "club", fetch = EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     val schedules: List<Schedule> = listOf(),
 
     @CollectionTable
-    @ElementCollection
+    @ElementCollection(fetch = EAGER)
     val categories: List<Category> = listOf(),
 
     @CreatedDate
