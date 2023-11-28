@@ -64,5 +64,5 @@ jobs:
           --application-name famila
           --deployment-group-name famila-group
           --file-exists-behavior OVERWRITE
-          --s3-location bucket=famila-develop/deploy/,bundleType=zip,key=famila.zip
+          --s3-location bucket=famila-develop,bundleType=zip,key=deploy/famila.zip
           --region ap-northeast-2
