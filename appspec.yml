@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source:  /
-    destination: /home/ec2-user/app/ # 배포될 위치
+    destination: /home/ec2-user/app/
     overwrite: yes
 
 permissions:
@@ -13,6 +13,6 @@ permissions:
 
 hooks:
   ApplicationStart:
-    - location: deploy.sh # ApplicationStart 단계에서 deploy.sh 실행
+    - location: deploy.sh
       timeout: 60
       runas: ec2-user
