@@ -34,6 +34,12 @@ jobs:
 
       - name: copy jar
         run: cp ./build/libs/*.jar ./deploy
+        
+      - name: copy appspec.yml
+        run: cp spec.yml ./deploy
+
+      - name: copy script
+        run: cp ./scripts/*.sh ./deploy
 
       - name: make zip file
         run: zip -r ./famila.zip ./deploy
@@ -48,3 +54,15 @@ jobs:
 
       - name: upload to S3
         run: aws s3 cp --region ap-northeast-2 ./famila.zip s3://$S3_BUCKET/$S3_FOLDER/
+
+      - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws deploy create-deployment \
+          --application-name famila \
+          --deployment-group-name famila-group \
+          --file-exists-behavior OVERWRITE \
+          --s3-location bucket=famila-develop/deploy/,bundleType=zip,key=famila.zip \ 
+          --region ap-northeast-2
