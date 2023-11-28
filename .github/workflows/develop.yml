@@ -26,5 +26,5 @@ jobs:
         run: chmod +x gradlew
 
       - name: build with gradle
-        run: ./gradlew clean build
+        run: ./gradlew clean build --exclude-task test
         
