@@ -59,10 +59,10 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: 
-          aws deploy create-deployment \
-          --application-name famila \
-          --deployment-group-name famila-group \
-          --file-exists-behavior OVERWRITE \
-          --s3-location bucket=famila-develop/deploy/,bundleType=zip,key=famila.zip \ 
+        run: |
+          aws deploy create-deployment
+          --application-name famila
+          --deployment-group-name famila-group
+          --file-exists-behavior OVERWRITE
+          --s3-location bucket=famila-develop/deploy/,bundleType=zip,key=famila.zip
           --region ap-northeast-2
