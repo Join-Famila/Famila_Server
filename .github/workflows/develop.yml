@@ -7,7 +7,7 @@ on:
     branches: [ "develop" ]
 
 env: 
-  S3_BUCKET: famila-deploy
+  S3_BUCKET: famila-develop
 
 jobs:
   build:
@@ -27,4 +27,23 @@ jobs:
 
       - name: build with gradle
         run: ./gradlew clean build --exclude-task test
+
+      - name: make directory
+        run: mkdir -p deploy
+
+      - name: copy jar
+        run: cp ./build/libs/*.jar ./deploy
+
+      - name: make zip file
+        run: zip -r ./famila.zip ./deploy
+        shell: bash
         
+      - name: aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with: 
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./famila.zip s3://$S3_BUCKET/deploy
