@@ -22,20 +22,20 @@ class ClubService(
     fun getClubById(id: Long) = clubRepository.findByIdOrNull(id) ?: throw NotFoundException("해당 Id를 가진 Club이 없습니다.")
 
     @Transactional
-    fun create(request: CreateClubRequest) {
+    fun create(request: CreateClubRequest): Club {
         val club = Club(
             name = request.name,
             introduce = request.introduce,
             categories = request.categories,
         )
-
         val member = Member(
             club = club,
             userId = request.userId,
             role = LEADER,
         )
 
-        clubRepository.save(club)
-        memberRepository.save(member)
+        return clubRepository.save(club).also {
+            memberRepository.save(member)
+        }
     }
 }

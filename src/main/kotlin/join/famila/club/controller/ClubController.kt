@@ -25,5 +25,5 @@ class ClubController(
 
     @PostMapping
     @ResponseStatus(CREATED)
-    fun create(@RequestBody request: CreateClubRequest) = clubService.create(request)
+    fun create(@RequestBody request: CreateClubRequest) = clubService.create(request).let(::ClubResponse)
 }
