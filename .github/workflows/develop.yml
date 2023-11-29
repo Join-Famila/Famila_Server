@@ -38,8 +38,11 @@ jobs:
       - name: copy appspec.yml
         run: cp appspec.yml ./deploy
 
+      - name: chmod
+        run: chmod +x ./scripts/deploy.sh
+
       - name: copy script
-        run: cp ./scripts/*.sh ./deploy
+        run: cp ./scripts/deploy.sh ./deploy
 
       - name: make zip file
         run: zip -r ./famila.zip ./deploy
