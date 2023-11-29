@@ -2,10 +2,10 @@ package join.famila.club.response
 
 import join.famila.club.infrastructure.Category
 
-class CategoryResponse(category: Category) {
-    val tag: String
-
-    init {
+class CategoryResponse(
+    val tag: String,
+) {
+    constructor(category: Category) : this(
         tag = category.tag.name
-    }
+    )
 }
