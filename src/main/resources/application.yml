@@ -10,16 +10,10 @@ spring:
     show-sql: true
     generate-ddl: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    url: ${MYSQL_URL}
-    user: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
   data:
     mongodb:
       host: ${MONGODB_HOST}
