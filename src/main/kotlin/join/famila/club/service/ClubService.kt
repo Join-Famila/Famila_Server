@@ -7,7 +7,6 @@ import join.famila.club.infrastructure.Member
 import join.famila.club.infrastructure.MemberRepository
 import join.famila.club.infrastructure.Role.LEADER
 import join.famila.club.request.CreateClubRequest
-import join.famila.core.exception.NotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -19,7 +18,8 @@ class ClubService(
 ) {
     fun getClub(): List<Club> = clubRepository.findAll()
 
-    fun getClubById(id: Long) = clubRepository.findByIdOrNull(id) ?: throw NotFoundException("해당 Id를 가진 Club이 없습니다.")
+    fun getClubById(id: Long) = clubRepository.findByIdOrNull(id)
+        ?: throw NoSuchElementException("해당 Id를 가진 Club이 없습니다.")
 
     @Transactional
     fun create(request: CreateClubRequest): Club {
