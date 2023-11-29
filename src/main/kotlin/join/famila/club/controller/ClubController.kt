@@ -18,7 +18,7 @@ class ClubController(
     private val clubService: ClubService,
 ) {
     @GetMapping
-    fun getClub() = clubService.getClub().map(::ClubResponse)
+    fun getClub(): List<ClubResponse> = clubService.getClub().map(::ClubResponse)
 
     @GetMapping("{id}")
     fun getClubById(@PathVariable id: Long) = clubService.getClubById(id).let(::ClubResponse)
