@@ -26,4 +26,4 @@ chmod +x $JAR_NAME
 
 echo "> $JAR_NAME is started"
 
-nohup java -jar -Duser.timezone=Asia/Seoul $JAR_NAME >> $REPOSITORY/famila.log &
+nohup java -DMYSQL_URL -DMYSQL_USERNAME -DMYSQL_PASSWORD -jar -Duser.timezone=Asia/Seoul $JAR_NAME >> $REPOSITORY/famila.log &
