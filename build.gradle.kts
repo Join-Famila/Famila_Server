@@ -31,6 +31,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("io.jsonwebtoken:jjwt-api:0.12.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:$kotestExtensionsVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")

@@ -19,3 +19,8 @@ spring:
       host: ${MONGODB_HOST}
       port: 27017
       database: famila
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  issuer: admin
+  expiration-second: 1800
