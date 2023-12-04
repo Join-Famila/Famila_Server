@@ -24,13 +24,11 @@ class TokenProvider(
     @Value("\${jwt.expiration-second}")
     private val expirationSecond: Long,
 ) {
-    private val IDENTIFY: String = "identify"
-
     fun createToken(user: User, uuid: String): String {
         return user.let {
             Jwts.builder()
                 .subject(getIdentificationInformation(it))
-                .claim("identify", uuid)
+                .claim(IDENTIFY_CODE, uuid)
                 .issuer(issuer)
                 .issuedAt(Timestamp.valueOf(now()))
                 .expiration(from(Instant.now().plusSeconds(expirationSecond)))
@@ -41,9 +39,9 @@ class TokenProvider(
 
     private fun getIdentificationInformation(user: User) = "${user.id}:$USER"
 
-    fun getSubject(token: String, identify: String): String {
+    fun getSubject(token: String, identifyCode: String): String {
         return getClaims(token = token).also {
-            check(it[IDENTIFY].toString() == identify)
+            check(it[IDENTIFY_CODE].toString() == identifyCode)
         }.subject
     }
 
@@ -53,5 +51,9 @@ class TokenProvider(
             .build()
             .parseSignedClaims(token)
             .payload
+    }
+
+    companion object {
+        private const val IDENTIFY_CODE = "identify_code"
     }
 }

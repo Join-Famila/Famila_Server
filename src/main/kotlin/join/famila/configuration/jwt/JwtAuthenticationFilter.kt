@@ -21,8 +21,8 @@ class JwtAuthenticationFilter(
         filterChain: FilterChain,
     ) {
         val token = request.getHeader(AUTHORIZATION)?.substring(7) ?: throw NullPointerException()
-        val identify = getCookieValueByKey(cookies = request.cookies)
-        val user = parseIdentificationInformation(token = token, identify = identify)
+        val identifyCode = getIdentifyCode(cookies = request.cookies)
+        val user = parseIdentificationInformation(token = token, identifyCode = identifyCode)
 
         UsernamePasswordAuthenticationToken(user, token, user.authorities)
             .apply {
@@ -33,18 +33,18 @@ class JwtAuthenticationFilter(
         filterChain.doFilter(request, response)
     }
 
-    private fun getCookieValueByKey(cookies: Array<Cookie>): String {
-        return cookies.associate { it.name to it.value }[IDENTIFY]
+    private fun getIdentifyCode(cookies: Array<Cookie>): String {
+        return cookies.associate { it.name to it.value }[IDENTIFY_CODE]
             ?: throw java.lang.NullPointerException()
     }
 
-    private fun parseIdentificationInformation(token: String, identify: String): User {
-        return tokenProvider.getSubject(token = token, identify = identify)
+    private fun parseIdentificationInformation(token: String, identifyCode: String): User {
+        return tokenProvider.getSubject(token = token, identifyCode = identifyCode)
             .split(":")
             .let { User(it[0], "", listOf(SimpleGrantedAuthority(it[1]))) }
     }
 
     companion object {
-        private const val IDENTIFY = "identify"
+        private const val IDENTIFY_CODE = "identify_code"
     }
 }
