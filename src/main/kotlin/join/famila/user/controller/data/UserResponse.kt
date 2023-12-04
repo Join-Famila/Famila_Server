@@ -1,7 +1,8 @@
 package join.famila.user.controller.data
 
-import join.famila.club.infrastructure.Category
 import java.time.LocalDate
+import join.famila.club.infrastructure.Category
+import join.famila.user.infrastructure.Gender
 
 data class UserResponse(
     val id: Long,
