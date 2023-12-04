@@ -16,5 +16,5 @@ spring:
         format_sql: true
   data:
     mongodb:
-      host: mongodb://${MONGODB_HOST}
+      host: ${MONGODB_HOST}
       database: famila
