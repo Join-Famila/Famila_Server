@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${MYSQL_URL}
+    url: jdbc:mysql://${MYSQL_URL}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -16,6 +16,5 @@ spring:
         format_sql: true
   data:
     mongodb:
-      host: ${MONGODB_HOST}
-      port: 27017
+      host: mongodb://${MONGODB_HOST}
       database: famila
