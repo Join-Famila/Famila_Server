@@ -15,16 +15,14 @@ import org.springframework.web.filter.OncePerRequestFilter
 class JwtAuthenticationFilter(
     private val tokenProvider: TokenProvider,
 ) : OncePerRequestFilter() {
-    private val IDENTIFY: String = "identify"
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
         val token = request.getHeader(AUTHORIZATION)?.substring(7) ?: throw NullPointerException()
-        val identify = getCookieValueByKey(cookies = request.cookies, key = IDENTIFY)
-        val user = parseIdentificationInformation(token, identify)
+        val identify = getCookieValueByKey(cookies = request.cookies)
+        val user = parseIdentificationInformation(token = token, identify = identify)
 
         UsernamePasswordAuthenticationToken(user, token, user.authorities)
             .apply {
@@ -35,13 +33,18 @@ class JwtAuthenticationFilter(
         filterChain.doFilter(request, response)
     }
 
-    private fun getCookieValueByKey(cookies: Array<Cookie>, key: String): String {
-        return cookies.associate { it.name to it.value }[key] ?: ""
+    private fun getCookieValueByKey(cookies: Array<Cookie>): String {
+        return cookies.associate { it.name to it.value }[IDENTIFY]
+            ?: throw java.lang.NullPointerException()
     }
 
     private fun parseIdentificationInformation(token: String, identify: String): User {
         return tokenProvider.getSubject(token = token, identify = identify)
             .split(":")
             .let { User(it[0], "", listOf(SimpleGrantedAuthority(it[1]))) }
+    }
+
+    companion object {
+        private const val IDENTIFY = "identify"
     }
 }

@@ -39,8 +39,7 @@ class TokenProvider(
         }
     }
 
-    private fun getIdentificationInformation(user: User) =
-        "${user.id}:$USER"
+    private fun getIdentificationInformation(user: User) = "${user.id}:$USER"
 
     fun getSubject(token: String, identify: String): String {
         return getClaims(token = token).also {
