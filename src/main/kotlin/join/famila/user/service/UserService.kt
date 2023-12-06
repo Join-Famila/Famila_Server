@@ -31,15 +31,15 @@ class UserService(
     }
 
     @Transactional
-    fun update(id: Long, request: UpdateUserRequest) {
-        userRepository.findByIdOrNull(id = id)
+    fun update(id: Long, request: UpdateUserRequest): User {
+        return userRepository.findByIdOrNull(id = id)
             ?.apply { update(request = request) }
             ?: throw NoSuchElementException()
     }
 
     @Transactional
-    fun updateProfile(id: Long, profile: MultipartFile) {
-        userRepository.findByIdOrNull(id = id)
+    fun updateProfile(id: Long, profile: MultipartFile): User {
+        return userRepository.findByIdOrNull(id = id)
             ?.apply { updateProfile(profile = profile) }
             ?: throw NoSuchElementException()
     }

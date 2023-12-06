@@ -13,9 +13,11 @@ import join.famila.club.infrastructure.Tag.MEDITATION
 import join.famila.user.controller.data.LocationRequest
 import join.famila.user.controller.data.SignInUserRequest
 import join.famila.user.controller.data.SignUpUserRequest
+import join.famila.user.controller.data.UpdateUserRequest
 import join.famila.user.infrastructure.Gender.MALE
 import join.famila.user.infrastructure.UserRepository
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.mock.web.MockMultipartFile
 
 @SpringBootTest
 class UserServiceTest(
@@ -30,7 +32,7 @@ class UserServiceTest(
             uid = uid,
             provider = "kakao",
             name = "홍길동",
-            profile = "asldkvmlaksdmvlakdvmalkvaldvnaldkvmaldkmfqokwmqlkdmlsakdmalkdv",
+            profile = MockMultipartFile("testName", "testContent".toByteArray()),
             gender = MALE,
             phoneNumber = "01012341234",
             location = LocationRequest(
@@ -67,6 +69,52 @@ class UserServiceTest(
 
             Then("일치하는 회원을 찾는다") {
                 user shouldNotBe null
+            }
+        }
+    }
+
+    Given("회원 수정 정보를 입력하고") {
+        val id = 1L
+
+        val request = UpdateUserRequest(
+            phoneNumber = "01009876543",
+            location = LocationRequest(
+                address = "서울특별시 금천구 독산동",
+                latitude = BigDecimal.valueOf(123.4),
+                longitude = BigDecimal.valueOf(233.624),
+            ),
+            introduce = "수정한 자기소개입니다.",
+            categories = setOf(
+                Category(tag = GOLF),
+                Category(tag = MEDITATION),
+            ),
+        )
+
+        When("수정 요청을하면") {
+            val user = userService.update(id = id, request = request)
+
+            Then("수정 된다") {
+                user.phoneNumber shouldBe "01009876543"
+                user.location.address shouldBe "서울특별시 금천구 독산동"
+                user.location.latitude shouldBe BigDecimal.valueOf(123.4)
+                user.location.longitude shouldBe BigDecimal.valueOf(233.624)
+                user.introduce shouldBe "수정한 자기소개입니다."
+            }
+        }
+    }
+
+    Given("회원 프로필정보를 입력하고") {
+        val id = 1L
+
+        val profile = MockMultipartFile("testName", "testContent".toByteArray())
+
+        val originProfile = userService.get(id = id).profile
+
+        When("프로필 수정 요청을 하면") {
+            val user = userService.updateProfile(id = id, profile = profile)
+
+            Then("수정된다") {
+                user.profile shouldNotBe originProfile
             }
         }
     }

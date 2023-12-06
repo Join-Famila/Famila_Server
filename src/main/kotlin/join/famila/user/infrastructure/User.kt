@@ -66,7 +66,7 @@ class User(
     }
 
     fun updateProfile(profile: MultipartFile) {
-        profile = TODO("s3Service를 사용하여 업로드 할 예정")
+        this.profile = profile.name
     }
 
     companion object {
@@ -80,7 +80,7 @@ class User(
                             provider = provider,
                         ),
                     ),
-                    profile = TODO("s3Service를 사용하여 업로드 할 예정"),
+                    profile = request.profile.name,
                     gender = gender,
                     phoneNumber = phoneNumber,
                     location = Location(

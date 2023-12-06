@@ -94,21 +94,21 @@ class UserController(
 
     @PutMapping("{id}")
     @ResponseStatus(NO_CONTENT)
-    @Tag(name = "회원수정 API", description = "사용자의 정보 수정")
+    @Tag(name = "회원정보수정 API", description = "사용자의 정보 수정")
     fun update(
         @PathVariable("id") id: Long,
         @RequestBody updateUserRequest: UpdateUserRequest,
     ) {
-        return userService.update(id = id, request = updateUserRequest)
+        userService.update(id = id, request = updateUserRequest)
     }
 
     @PutMapping("{id}/profile")
     @ResponseStatus(NO_CONTENT)
-    @Tag(name = "회원수정 API", description = "사용자의 정보 수정")
+    @Tag(name = "회원프로필수정 API", description = "사용자의 프로필 수정")
     fun update(
         @PathVariable("id") id: Long,
         @RequestBody profile: MultipartFile,
     ) {
-        return userService.updateProfile(id = id, profile = profile)
+        userService.updateProfile(id = id, profile = profile)
     }
 }
