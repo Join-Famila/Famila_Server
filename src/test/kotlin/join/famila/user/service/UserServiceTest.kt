@@ -48,7 +48,7 @@ class UserServiceTest(
         )
 
         When("회원가입을 한다면") {
-            val user = userService.save(user = request)
+            val user = userService.save(request = request)
 
             Then("정상적으로 회원가입이 된다") {
                 user.name shouldBe "홍길동"

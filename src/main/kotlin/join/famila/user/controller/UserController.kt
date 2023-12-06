@@ -84,6 +84,6 @@ class UserController(
             )
         }
 
-        return userService.save(user = signUpRequest.toEntity()).let(::UserResponse)
+        return userService.save(request = signUpRequest).let(::UserResponse)
     }
 }
