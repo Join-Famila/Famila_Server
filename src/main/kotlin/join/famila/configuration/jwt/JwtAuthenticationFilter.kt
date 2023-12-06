@@ -35,7 +35,7 @@ class JwtAuthenticationFilter(
 
     private fun getIdentifyCode(cookies: Array<Cookie>): String {
         return cookies.associate { it.name to it.value }[IDENTIFY_CODE]
-            ?: throw java.lang.NullPointerException()
+            ?: throw NullPointerException()
     }
 
     private fun parseIdentificationInformation(token: String, identifyCode: String): User {
