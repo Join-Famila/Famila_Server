@@ -11,6 +11,9 @@ import org.springframework.security.config.http.SessionCreationPolicy.STATELESS
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 
 @Configuration
@@ -31,6 +34,7 @@ class SecurityConfiguration(
     fun filterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         return httpSecurity
             .csrf { it.disable() }
+            .cors { }
             .authorizeHttpRequests {
                 it.anyRequest().authenticated()
             }
@@ -40,6 +44,22 @@ class SecurityConfiguration(
                 BasicAuthenticationFilter::class.java,
             )
             .build()
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        return UrlBasedCorsConfigurationSource().apply {
+            registerCorsConfiguration(
+                "/**",
+                CorsConfiguration().apply {
+                    allowCredentials = true
+                    allowedOrigins = listOf("*")
+                    allowedMethods = listOf("*")
+                    allowedHeaders = listOf("*")
+                    exposedHeaders = listOf("*")
+                }
+            )
+        }
     }
 
     @Bean
