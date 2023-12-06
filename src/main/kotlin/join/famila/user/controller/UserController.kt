@@ -2,15 +2,19 @@ package join.famila.user.controller
 
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
+import java.math.BigDecimal
+import java.security.Principal
+import java.time.LocalDate
 import join.famila.club.infrastructure.Category
 import join.famila.club.infrastructure.Tag.BIKING
 import join.famila.club.infrastructure.Tag.GOLF
 import join.famila.club.infrastructure.Tag.MEDITATION
-import join.famila.user.controller.data.Gender.*
 import join.famila.user.controller.data.LocationResponse
 import join.famila.user.controller.data.SignInRequest
 import join.famila.user.controller.data.SignUpRequest
 import join.famila.user.controller.data.UserResponse
+import join.famila.user.infrastructure.Gender.FEMALE
+import join.famila.user.infrastructure.Gender.MALE
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.OK
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,9 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import java.math.BigDecimal
-import java.security.Principal
-import java.time.LocalDate
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -46,8 +47,10 @@ class UserController {
             categories = setOf(
                 Category(tag = BIKING),
                 Category(tag = GOLF),
-                Category(tag =
-                MEDITATION),
+                Category(
+                    tag =
+                    MEDITATION
+                ),
             ),
         )
     }
@@ -59,8 +62,14 @@ class UserController {
         @RequestBody signInRequest: SignInRequest,
         httpServletResponse: HttpServletResponse,
     ): UserResponse {
-        httpServletResponse.addHeader("authentication", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxOlVTRVIiLCJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTUxNjIzOTMyMn0.1JJh--9PzUBQPOzzpSMlhEWs1HuDLq_2NXM5icUgWmo")
-        httpServletResponse.addHeader("refreshToken", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIn0.rTCH8cLoGxAm_xw68z-zXVKi9ie6xJn9tnVWjd_9ftE")
+        httpServletResponse.addHeader(
+            "authentication",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxOlVTRVIiLCJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTUxNjIzOTMyMn0.1JJh--9PzUBQPOzzpSMlhEWs1HuDLq_2NXM5icUgWmo"
+        )
+        httpServletResponse.addHeader(
+            "refreshToken",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIn0.rTCH8cLoGxAm_xw68z-zXVKi9ie6xJn9tnVWjd_9ftE"
+        )
 
         return UserResponse(
             id = 1,
@@ -90,8 +99,14 @@ class UserController {
         @RequestBody signUpRequest: SignUpRequest,
         httpServletResponse: HttpServletResponse,
     ): UserResponse {
-        httpServletResponse.addHeader("authentication", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxOlVTRVIiLCJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTUxNjIzOTMyMn0.1JJh--9PzUBQPOzzpSMlhEWs1HuDLq_2NXM5icUgWmo")
-        httpServletResponse.addHeader("refreshToken", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIn0.rTCH8cLoGxAm_xw68z-zXVKi9ie6xJn9tnVWjd_9ftE")
+        httpServletResponse.addHeader(
+            "authentication",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxOlVTRVIiLCJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTUxNjIzOTMyMn0.1JJh--9PzUBQPOzzpSMlhEWs1HuDLq_2NXM5icUgWmo"
+        )
+        httpServletResponse.addHeader(
+            "refreshToken",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIn0.rTCH8cLoGxAm_xw68z-zXVKi9ie6xJn9tnVWjd_9ftE"
+        )
 
         return with(signUpRequest) {
             UserResponse(
