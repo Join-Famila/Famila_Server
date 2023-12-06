@@ -5,18 +5,23 @@ import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
 import java.security.Principal
 import java.util.UUID.randomUUID
-import join.famila.user.controller.data.SignInRequest
-import join.famila.user.controller.data.SignUpRequest
+import join.famila.user.controller.data.SignInUserRequest
+import join.famila.user.controller.data.SignUpUserRequest
+import join.famila.user.controller.data.UpdateUserRequest
 import join.famila.user.controller.data.UserResponse
 import join.famila.user.service.UserService
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.HttpStatus.NO_CONTENT
 import org.springframework.http.HttpStatus.OK
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -34,7 +39,7 @@ class UserController(
     @ResponseStatus(OK)
     @Tag(name = "로그인 API", description = "헤더로 Authentication, refreshToken과 사용자 정보를 전달")
     fun signIn(
-        @RequestBody signInRequest: SignInRequest,
+        @RequestBody signInUserRequest: SignInUserRequest,
         httpServletResponse: HttpServletResponse,
     ): UserResponse {
         httpServletResponse.apply {
@@ -47,7 +52,7 @@ class UserController(
             )
         }
 
-        return userService.get(request = signInRequest).let(::UserResponse)
+        return userService.get(request = signInUserRequest).let(::UserResponse)
     }
 
     @PostMapping("refresh")
@@ -71,7 +76,7 @@ class UserController(
     @ResponseStatus(CREATED)
     @Tag(name = "회원가입 API", description = "헤더로 Authentication, refreshToken 과 사용자 정보를 전달")
     fun signUp(
-        @RequestBody signUpRequest: SignUpRequest,
+        @RequestBody signUpUserRequest: SignUpUserRequest,
         httpServletResponse: HttpServletResponse,
     ): UserResponse {
         httpServletResponse.apply {
@@ -84,6 +89,26 @@ class UserController(
             )
         }
 
-        return userService.save(request = signUpRequest).let(::UserResponse)
+        return userService.save(request = signUpUserRequest).let(::UserResponse)
+    }
+
+    @PutMapping("{id}")
+    @ResponseStatus(NO_CONTENT)
+    @Tag(name = "회원수정 API", description = "사용자의 정보 수정")
+    fun update(
+        @PathVariable("id") id: Long,
+        @RequestBody updateUserRequest: UpdateUserRequest,
+    ) {
+        return userService.update(id = id, request = updateUserRequest)
+    }
+
+    @PutMapping("{id}/profile")
+    @ResponseStatus(NO_CONTENT)
+    @Tag(name = "회원수정 API", description = "사용자의 정보 수정")
+    fun update(
+        @PathVariable("id") id: Long,
+        @RequestBody profile: MultipartFile,
+    ) {
+        return userService.updateProfile(id = id, profile = profile)
     }
 }

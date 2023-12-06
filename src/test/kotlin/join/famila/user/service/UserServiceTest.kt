@@ -11,8 +11,8 @@ import join.famila.club.infrastructure.Tag.BIKING
 import join.famila.club.infrastructure.Tag.GOLF
 import join.famila.club.infrastructure.Tag.MEDITATION
 import join.famila.user.controller.data.LocationRequest
-import join.famila.user.controller.data.SignInRequest
-import join.famila.user.controller.data.SignUpRequest
+import join.famila.user.controller.data.SignInUserRequest
+import join.famila.user.controller.data.SignUpUserRequest
 import join.famila.user.infrastructure.Gender.MALE
 import join.famila.user.infrastructure.UserRepository
 import org.springframework.boot.test.context.SpringBootTest
@@ -26,7 +26,7 @@ class UserServiceTest(
     val uid = UUID.randomUUID().toString()
 
     Given("회원 정보를 입력하고") {
-        val request = SignUpRequest(
+        val request = SignUpUserRequest(
             uid = uid,
             provider = "kakao",
             name = "홍길동",
@@ -57,7 +57,7 @@ class UserServiceTest(
     }
 
     Given("로그인 정보를 입력하고") {
-        val request = SignInRequest(
+        val request = SignInUserRequest(
             uid = uid,
             provider = "kakao",
         )

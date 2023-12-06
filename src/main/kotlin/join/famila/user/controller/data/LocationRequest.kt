@@ -1,6 +1,7 @@
 package join.famila.user.controller.data
 
 import java.math.BigDecimal
+import join.famila.user.infrastructure.Location
 
 data class LocationRequest(
     val address: String,
@@ -8,4 +9,12 @@ data class LocationRequest(
     val latitude: BigDecimal,
 
     val longitude: BigDecimal,
-)
+) {
+    fun toEntity(): Location {
+        return Location(
+            address = address,
+            latitude = latitude,
+            longitude = longitude,
+        )
+    }
+}

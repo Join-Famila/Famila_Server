@@ -13,9 +13,11 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 import join.famila.club.infrastructure.Category
-import join.famila.user.controller.data.SignUpRequest
+import join.famila.user.controller.data.SignUpUserRequest
+import join.famila.user.controller.data.UpdateUserRequest
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.web.multipart.MultipartFile
 
 @Entity
 class User(
@@ -29,34 +31,46 @@ class User(
     @ElementCollection
     val identifier: Set<Identifier> = setOf(),
 
-    val profile: String,
+    var profile: String,
 
     @Enumerated(STRING)
     val gender: Gender,
 
-    val phoneNumber: String,
+    var phoneNumber: String,
 
     @Embedded
-    val location: Location,
+    var location: Location,
 
     val birthDay: LocalDate,
 
-    val introduce: String,
+    var introduce: String,
 
     @CollectionTable
     @ElementCollection
-    val categories: Set<Category> = setOf(),
+    var categories: Set<Category> = setOf(),
 
     @CreatedDate
     val createdAt: LocalDateTime = now(),
 
     @LastModifiedDate
-    val updatedAt: LocalDateTime? = null,
+    var updatedAt: LocalDateTime? = null,
 
     val deletedAt: LocalDateTime? = null,
 ) {
+    fun update(request: UpdateUserRequest) {
+        phoneNumber = request.phoneNumber
+        location = request.location.toEntity()
+        introduce = request.introduce
+        categories = request.categories
+        updatedAt = now()
+    }
+
+    fun updateProfile(profile: MultipartFile) {
+        profile = TODO("s3Service를 사용하여 업로드 할 예정")
+    }
+
     companion object {
-        fun of(request: SignUpRequest): User {
+        fun of(request: SignUpUserRequest): User {
             return with(request) {
                 User(
                     name = name,
