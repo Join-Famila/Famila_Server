@@ -24,6 +24,6 @@ class UserService(
     }
 
     fun save(request: SignUpRequest): User {
-        return userRepository.save(request.toEntity())
+        return userRepository.save(User.of(request = request))
     }
 }

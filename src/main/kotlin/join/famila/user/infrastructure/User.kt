@@ -13,6 +13,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 import join.famila.club.infrastructure.Category
+import join.famila.user.controller.data.SignUpRequest
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 
@@ -53,4 +54,31 @@ class User(
     val updatedAt: LocalDateTime? = null,
 
     val deletedAt: LocalDateTime? = null,
-)
+) {
+    companion object {
+        fun of(request: SignUpRequest): User {
+            return with(request) {
+                User(
+                    name = name,
+                    identifier = setOf(
+                        Identifier(
+                            uid = uid,
+                            provider = provider,
+                        ),
+                    ),
+                    profile = TODO("s3Service를 사용하여 업로드 할 예정"),
+                    gender = gender,
+                    phoneNumber = phoneNumber,
+                    location = Location(
+                        address = location.address,
+                        latitude = location.latitude,
+                        longitude = location.longitude,
+                    ),
+                    birthDay = birthDay,
+                    introduce = introduce,
+                    categories = categories,
+                )
+            }
+        }
+    }
+}
