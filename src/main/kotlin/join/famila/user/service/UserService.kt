@@ -9,7 +9,6 @@ import join.famila.user.infrastructure.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.multipart.MultipartFile
 
 @Service
 class UserService(
@@ -34,13 +33,6 @@ class UserService(
     fun update(id: Long, request: UpdateUserRequest): User {
         return userRepository.findByIdOrNull(id = id)
             ?.apply { update(request = request) }
-            ?: throw NoSuchElementException()
-    }
-
-    @Transactional
-    fun updateProfile(id: Long, profile: MultipartFile): User {
-        return userRepository.findByIdOrNull(id = id)
-            ?.apply { updateProfile(profile = profile) }
             ?: throw NoSuchElementException()
     }
 }

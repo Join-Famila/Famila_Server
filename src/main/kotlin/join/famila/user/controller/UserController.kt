@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -100,15 +99,5 @@ class UserController(
         @RequestBody updateUserRequest: UpdateUserRequest,
     ) {
         userService.update(id = id, request = updateUserRequest)
-    }
-
-    @PutMapping("{id}/profile")
-    @ResponseStatus(NO_CONTENT)
-    @Tag(name = "회원프로필수정 API", description = "사용자의 프로필 수정")
-    fun update(
-        @PathVariable("id") id: Long,
-        @RequestBody profile: MultipartFile,
-    ) {
-        userService.updateProfile(id = id, profile = profile)
     }
 }

@@ -77,6 +77,7 @@ class UserServiceTest(
         val id = 1L
 
         val request = UpdateUserRequest(
+            profile = MockMultipartFile("testName", "testContent".toByteArray()),
             phoneNumber = "01009876543",
             location = LocationRequest(
                 address = "서울특별시 금천구 독산동",
@@ -99,22 +100,6 @@ class UserServiceTest(
                 user.location.latitude shouldBe BigDecimal.valueOf(123.4)
                 user.location.longitude shouldBe BigDecimal.valueOf(233.624)
                 user.introduce shouldBe "수정한 자기소개입니다."
-            }
-        }
-    }
-
-    Given("회원 프로필정보를 입력하고") {
-        val id = 1L
-
-        val profile = MockMultipartFile("testName", "testContent".toByteArray())
-
-        val originProfile = userService.get(id = id).profile
-
-        When("프로필 수정 요청을 하면") {
-            val user = userService.updateProfile(id = id, profile = profile)
-
-            Then("수정된다") {
-                user.profile shouldNotBe originProfile
             }
         }
     }
