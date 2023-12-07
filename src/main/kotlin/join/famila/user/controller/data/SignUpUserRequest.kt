@@ -12,8 +12,6 @@ data class SignUpUserRequest(
 
     val name: String,
 
-    val profile: MultipartFile,
-
     val gender: Gender,
 
     val phoneNumber: String,
@@ -22,7 +20,7 @@ data class SignUpUserRequest(
 
     val birthDay: LocalDate,
 
-    val introduce: String,
+    val introduce: String?,
 
     val categories: Set<Category>,
 )

@@ -13,14 +13,17 @@ import join.famila.user.service.UserService
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.NO_CONTENT
 import org.springframework.http.HttpStatus.OK
+import org.springframework.http.MediaType.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -71,11 +74,12 @@ class UserController(
         }
     }
 
-    @PostMapping
+    @PostMapping(consumes = [APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE])
     @ResponseStatus(CREATED)
     @Tag(name = "회원가입 API", description = "헤더로 Authentication, refreshToken 과 사용자 정보를 전달")
     fun signUp(
-        @RequestBody signUpUserRequest: SignUpUserRequest,
+        @RequestPart request: SignUpUserRequest,
+        @RequestPart(required = false) profile: MultipartFile?,
         httpServletResponse: HttpServletResponse,
     ): UserResponse {
         httpServletResponse.apply {
@@ -88,16 +92,17 @@ class UserController(
             )
         }
 
-        return userService.save(request = signUpUserRequest).let(::UserResponse)
+        return userService.save(request = request, profile = profile).let(::UserResponse)
     }
 
-    @PutMapping("{id}")
+    @PutMapping("{id}", consumes = [APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE])
     @ResponseStatus(NO_CONTENT)
     @Tag(name = "회원정보수정 API", description = "사용자의 정보 수정")
     fun update(
         @PathVariable("id") id: Long,
-        @RequestBody updateUserRequest: UpdateUserRequest,
+        @RequestPart request: UpdateUserRequest,
+        @RequestPart(required = false) profile: MultipartFile?,
     ) {
-        userService.update(id = id, request = updateUserRequest)
+        userService.update(id = id, request = request, profile = profile)
     }
 }

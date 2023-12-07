@@ -17,6 +17,7 @@ import join.famila.user.controller.data.SignUpUserRequest
 import join.famila.user.controller.data.UpdateUserRequest
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.web.multipart.MultipartFile
 
 @Entity
 class User(
@@ -42,7 +43,7 @@ class User(
 
     val birthDay: LocalDate,
 
-    var introduce: String,
+    var introduce: String? = null,
 
     @CollectionTable
     @ElementCollection
@@ -56,9 +57,9 @@ class User(
 
     val deletedAt: LocalDateTime? = null,
 ) {
-    fun update(request: UpdateUserRequest) {
-        if (request.profile != null) {
-            profile = request.profile.name
+    fun update(request: UpdateUserRequest, profile: MultipartFile?) {
+        if (profile != null) {
+            this.profile = profile.name
         }
         phoneNumber = request.phoneNumber
         location = request.location.toEntity()
@@ -68,7 +69,7 @@ class User(
     }
 
     companion object {
-        fun of(request: SignUpUserRequest): User {
+        fun of(request: SignUpUserRequest, profile: MultipartFile?): User {
             return with(request) {
                 User(
                     name = name,
@@ -78,7 +79,7 @@ class User(
                             provider = provider,
                         ),
                     ),
-                    profile = request.profile.name,
+                    profile = profile?.name ?: "",
                     gender = gender,
                     phoneNumber = phoneNumber,
                     location = Location(
