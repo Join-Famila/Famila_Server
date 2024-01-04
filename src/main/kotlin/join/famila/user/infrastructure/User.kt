@@ -43,7 +43,7 @@ class User(
 
     val birthDay: LocalDate,
 
-    var introduce: String,
+    var introduce: String? = null,
 
     @CollectionTable
     @ElementCollection
@@ -57,7 +57,10 @@ class User(
 
     val deletedAt: LocalDateTime? = null,
 ) {
-    fun update(request: UpdateUserRequest) {
+    fun update(request: UpdateUserRequest, profile: MultipartFile?) {
+        if (profile != null) {
+            this.profile = profile.name
+        }
         phoneNumber = request.phoneNumber
         location = request.location.toEntity()
         introduce = request.introduce
@@ -65,12 +68,8 @@ class User(
         updatedAt = now()
     }
 
-    fun updateProfile(profile: MultipartFile) {
-        profile = TODO("s3Service를 사용하여 업로드 할 예정")
-    }
-
     companion object {
-        fun of(request: SignUpUserRequest): User {
+        fun of(request: SignUpUserRequest, profile: MultipartFile?): User {
             return with(request) {
                 User(
                     name = name,
@@ -80,7 +79,7 @@ class User(
                             provider = provider,
                         ),
                     ),
-                    profile = TODO("s3Service를 사용하여 업로드 할 예정"),
+                    profile = profile?.name ?: "",
                     gender = gender,
                     phoneNumber = phoneNumber,
                     location = Location(
