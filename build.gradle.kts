@@ -32,6 +32,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("com.amazonaws:aws-java-sdk-s3:1.12.604")
+    implementation("io.jsonwebtoken:jjwt-api:0.12.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:$kotestExtensionsVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
