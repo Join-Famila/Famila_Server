@@ -16,9 +16,11 @@ import join.famila.user.controller.data.SignUpUserRequest
 import join.famila.user.controller.data.UpdateUserRequest
 import join.famila.user.infrastructure.Gender.MALE
 import join.famila.user.infrastructure.UserRepository
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.mock.web.MockMultipartFile
 
+@DataJpaTest
 @SpringBootTest
 class UserServiceTest(
     private val userRepository: UserRepository,
@@ -32,7 +34,6 @@ class UserServiceTest(
             uid = uid,
             provider = "kakao",
             name = "홍길동",
-            profile = MockMultipartFile("testName", "testContent".toByteArray()),
             gender = MALE,
             phoneNumber = "01012341234",
             location = LocationRequest(
@@ -49,8 +50,10 @@ class UserServiceTest(
             ),
         )
 
+        val profile = MockMultipartFile("testName", "testContent".toByteArray())
+
         When("회원가입을 한다면") {
-            val user = userService.save(request = request)
+            val user = userService.save(request = request, profile = profile)
 
             Then("정상적으로 회원가입이 된다") {
                 user.name shouldBe "홍길동"
@@ -77,7 +80,6 @@ class UserServiceTest(
         val id = 1L
 
         val request = UpdateUserRequest(
-            profile = MockMultipartFile("testName", "testContent".toByteArray()),
             phoneNumber = "01009876543",
             location = LocationRequest(
                 address = "서울특별시 금천구 독산동",
@@ -91,8 +93,10 @@ class UserServiceTest(
             ),
         )
 
+        val profile = MockMultipartFile("testName", "testContent".toByteArray())
+
         When("수정 요청을하면") {
-            val user = userService.update(id = id, request = request)
+            val user = userService.update(id = id, request = request, profile = profile)
 
             Then("수정 된다") {
                 user.phoneNumber shouldBe "01009876543"
