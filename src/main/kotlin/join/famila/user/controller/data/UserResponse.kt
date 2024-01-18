@@ -20,7 +20,7 @@ data class UserResponse(
 
     val birthDay: LocalDate,
 
-    val introduce: String,
+    val introduce: String?,
 
     val categories: Set<Category>,
 ) {

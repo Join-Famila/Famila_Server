@@ -1,9 +1,11 @@
 package join.famila.user.controller.data
 
-import java.time.LocalDate
 import join.famila.club.infrastructure.Category
 import join.famila.user.infrastructure.Gender
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.multipart.MultipartFile
+import java.math.BigDecimal
+import java.time.LocalDate
 
 data class SignUpUserRequest(
     val uid: String,
@@ -16,7 +18,11 @@ data class SignUpUserRequest(
 
     val phoneNumber: String,
 
-    val location: LocationRequest,
+    val address: String,
+
+    val latitude: BigDecimal,
+
+    val longitude: BigDecimal,
 
     val birthDay: LocalDate,
 

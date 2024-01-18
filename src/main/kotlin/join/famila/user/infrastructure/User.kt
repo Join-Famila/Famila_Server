@@ -9,15 +9,15 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalDateTime.now
 import join.famila.club.infrastructure.Category
 import join.famila.user.controller.data.SignUpUserRequest
 import join.famila.user.controller.data.UpdateUserRequest
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.web.multipart.MultipartFile
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalDateTime.now
 
 @Entity
 class User(
@@ -62,7 +62,11 @@ class User(
             this.profile = profile.name
         }
         phoneNumber = request.phoneNumber
-        location = request.location.toEntity()
+        location = Location(
+            address = request.address,
+            latitude = request.latitude,
+            longitude = request.longitude,
+        )
         introduce = request.introduce
         categories = request.categories
         updatedAt = now()
@@ -83,9 +87,9 @@ class User(
                     gender = gender,
                     phoneNumber = phoneNumber,
                     location = Location(
-                        address = location.address,
-                        latitude = location.latitude,
-                        longitude = location.longitude,
+                        address = address,
+                        latitude = latitude,
+                        longitude = longitude,
                     ),
                     birthDay = birthDay,
                     introduce = introduce,

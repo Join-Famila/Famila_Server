@@ -10,7 +10,6 @@ import join.famila.club.infrastructure.Category
 import join.famila.club.infrastructure.Tag.BIKING
 import join.famila.club.infrastructure.Tag.GOLF
 import join.famila.club.infrastructure.Tag.MEDITATION
-import join.famila.user.controller.data.LocationRequest
 import join.famila.user.controller.data.SignInUserRequest
 import join.famila.user.controller.data.SignUpUserRequest
 import join.famila.user.controller.data.UpdateUserRequest

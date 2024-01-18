@@ -3,8 +3,6 @@ package join.famila.user.controller
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
-import java.security.Principal
-import java.util.UUID.randomUUID
 import join.famila.user.controller.data.SignInUserRequest
 import join.famila.user.controller.data.SignUpUserRequest
 import join.famila.user.controller.data.UpdateUserRequest
@@ -24,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import java.security.Principal
+import java.util.UUID.randomUUID
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -74,12 +74,12 @@ class UserController(
         }
     }
 
-    @PostMapping(consumes = [APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE])
+    @PostMapping(consumes = [MULTIPART_FORM_DATA_VALUE])
     @ResponseStatus(CREATED)
     @Tag(name = "회원가입 API", description = "헤더로 Authentication, refreshToken 과 사용자 정보를 전달")
     fun signUp(
         @RequestPart request: SignUpUserRequest,
-        @RequestPart(required = false) profile: MultipartFile?,
+        @RequestPart profile: MultipartFile?,
         httpServletResponse: HttpServletResponse,
     ): UserResponse {
         httpServletResponse.apply {
