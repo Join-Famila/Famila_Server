@@ -26,6 +26,7 @@ class UserService(
         ) ?: throw NoSuchElementException()
     }
 
+    @Transactional
     fun save(request: SignUpUserRequest, profile: MultipartFile?): User {
         return userRepository.save(User.of(request = request, profile = profile))
     }

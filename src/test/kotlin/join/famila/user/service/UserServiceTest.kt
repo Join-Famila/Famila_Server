@@ -16,12 +16,12 @@ import join.famila.user.controller.data.SignUpUserRequest
 import join.famila.user.controller.data.UpdateUserRequest
 import join.famila.user.infrastructure.Gender.MALE
 import join.famila.user.infrastructure.UserRepository
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.mock.web.MockMultipartFile
+import org.springframework.transaction.annotation.Transactional
 
-@DataJpaTest
 @SpringBootTest
+@Transactional
 class UserServiceTest(
     private val userRepository: UserRepository,
 ) : BehaviorSpec({
@@ -77,7 +77,29 @@ class UserServiceTest(
     }
 
     Given("회원 수정 정보를 입력하고") {
-        val id = 1L
+        val signUpUserRequest = SignUpUserRequest(
+            uid = uid,
+            provider = "kakao",
+            name = "홍길동",
+            gender = MALE,
+            phoneNumber = "01012341234",
+            location = LocationRequest(
+                address = "서울특별시 구로구 구로동",
+                latitude = BigDecimal.valueOf(123.4),
+                longitude = BigDecimal.valueOf(233.624)
+            ),
+            birthDay = LocalDate.of(1991, 1, 1),
+            introduce = "안녕하세요 자기소개 입니다.",
+            categories = setOf(
+                Category(tag = BIKING),
+                Category(tag = GOLF),
+                Category(tag = MEDITATION),
+            ),
+        )
+
+        val signUpProfile = MockMultipartFile("testName", "testContent".toByteArray())
+
+        val id = userService.save(signUpUserRequest, signUpProfile).id
 
         val request = UpdateUserRequest(
             phoneNumber = "01009876543",

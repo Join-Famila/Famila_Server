@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus.OK
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -79,8 +80,8 @@ class UserController(
     @ResponseStatus(CREATED)
     @Tag(name = "회원가입 API", description = "헤더로 Authentication, refreshToken 과 사용자 정보를 전달")
     fun signUp(
-        @RequestPart request: SignUpUserRequest,
-        @RequestPart(required = false) profile: MultipartFile?,
+        @ModelAttribute request: SignUpUserRequest,
+        @ModelAttribute profile: MultipartFile?,
         httpServletResponse: HttpServletResponse,
     ): UserResponse {
         httpServletResponse.apply {
