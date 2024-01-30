@@ -26,21 +26,15 @@ class UserService(
         ) ?: throw NoSuchElementException()
     }
 
-    fun save(request: SignUpUserRequest): User {
-        return userRepository.save(User.of(request = request))
+    @Transactional
+    fun save(request: SignUpUserRequest, profile: MultipartFile?): User {
+        return userRepository.save(User.of(request = request, profile = profile))
     }
 
     @Transactional
-    fun update(id: Long, request: UpdateUserRequest) {
-        userRepository.findByIdOrNull(id = id)
-            ?.apply { update(request = request) }
-            ?: throw NoSuchElementException()
-    }
-
-    @Transactional
-    fun updateProfile(id: Long, profile: MultipartFile) {
-        userRepository.findByIdOrNull(id = id)
-            ?.apply { updateProfile(profile = profile) }
+    fun update(id: Long, request: UpdateUserRequest, profile: MultipartFile?): User {
+        return userRepository.findByIdOrNull(id = id)
+            ?.apply { update(request = request, profile = profile) }
             ?: throw NoSuchElementException()
     }
 }

@@ -1,15 +1,18 @@
 package join.famila.user.controller.data
 
 import join.famila.club.infrastructure.Category
-import join.famila.user.infrastructure.Gender
-import org.springframework.web.multipart.MultipartFile
+import java.math.BigDecimal
 
 data class UpdateUserRequest(
     val phoneNumber: String,
 
-    val location: LocationRequest,
+    val address: String,
 
-    val introduce: String,
+    val latitude: BigDecimal,
+
+    val longitude: BigDecimal,
+
+    val introduce: String?,
 
     val categories: Set<Category>,
 )

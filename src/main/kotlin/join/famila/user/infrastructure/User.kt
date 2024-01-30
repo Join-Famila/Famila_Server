@@ -9,15 +9,15 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalDateTime.now
 import join.famila.club.infrastructure.Category
 import join.famila.user.controller.data.SignUpUserRequest
 import join.famila.user.controller.data.UpdateUserRequest
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.web.multipart.MultipartFile
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalDateTime.now
 
 @Entity
 class User(
@@ -43,7 +43,7 @@ class User(
 
     val birthDay: LocalDate,
 
-    var introduce: String,
+    var introduce: String? = null,
 
     @CollectionTable
     @ElementCollection
@@ -57,20 +57,23 @@ class User(
 
     val deletedAt: LocalDateTime? = null,
 ) {
-    fun update(request: UpdateUserRequest) {
+    fun update(request: UpdateUserRequest, profile: MultipartFile?) {
+        if (profile != null) {
+            this.profile = profile.name
+        }
         phoneNumber = request.phoneNumber
-        location = request.location.toEntity()
+        location = Location(
+            address = request.address,
+            latitude = request.latitude,
+            longitude = request.longitude,
+        )
         introduce = request.introduce
         categories = request.categories
         updatedAt = now()
     }
 
-    fun updateProfile(profile: MultipartFile) {
-        profile = TODO("s3Service를 사용하여 업로드 할 예정")
-    }
-
     companion object {
-        fun of(request: SignUpUserRequest): User {
+        fun of(request: SignUpUserRequest, profile: MultipartFile?): User {
             return with(request) {
                 User(
                     name = name,
@@ -80,13 +83,13 @@ class User(
                             provider = provider,
                         ),
                     ),
-                    profile = TODO("s3Service를 사용하여 업로드 할 예정"),
+                    profile = profile?.name ?: "",
                     gender = gender,
                     phoneNumber = phoneNumber,
                     location = Location(
-                        address = location.address,
-                        latitude = location.latitude,
-                        longitude = location.longitude,
+                        address = address,
+                        latitude = latitude,
+                        longitude = longitude,
                     ),
                     birthDay = birthDay,
                     introduce = introduce,
