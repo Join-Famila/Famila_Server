@@ -55,6 +55,6 @@ tasks.named<Jar>("jar") {
     enabled = false
 }
 
-//configurations.all {
-//    exclude(group = "commons-logging", module = "commons-logging")
-//}
+configurations.all {
+    exclude(group = "commons-logging", module = "commons-logging")
+}
