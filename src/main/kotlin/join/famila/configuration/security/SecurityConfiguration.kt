@@ -26,6 +26,9 @@ class SecurityConfiguration(
             web.ignoring().requestMatchers(
                 "/swagger-ui/**",
                 "/v3/**",
+                "/api/v1/users/signUp",
+                "/api/v1/users/signIn",
+                "/api/v1/users/refresh",
             )
         }
     }
