@@ -45,6 +45,6 @@ class JwtAuthenticationFilter(
     }
 
     companion object {
-        private const val IDENTIFY_CODE = "identify_code"
+        private const val IDENTIFY_CODE = "identifyCode"
     }
 }

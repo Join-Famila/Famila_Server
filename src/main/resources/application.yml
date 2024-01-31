@@ -36,4 +36,4 @@ storage:
 jwt:
   secret-key: ${JWT_SECRET_KEY}
   issuer: admin
-  expiration-second: 1800
+  expiration-second: 86400

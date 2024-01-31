@@ -33,6 +33,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("com.amazonaws:aws-java-sdk-s3:1.12.604")
     implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:$kotestExtensionsVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
@@ -54,8 +56,4 @@ tasks.withType<Test> {
 
 tasks.named<Jar>("jar") {
     enabled = false
-}
-
-configurations.all {
-    exclude(group = "commons-logging", module = "commons-logging")
 }
