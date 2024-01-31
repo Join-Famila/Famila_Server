@@ -28,6 +28,7 @@ class SecurityConfiguration(
                 "/v3/**",
                 "/api/v1/users/signUp",
                 "/api/v1/users/signIn",
+                "/api/v1/users/refresh",
             )
         }
     }
