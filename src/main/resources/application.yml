@@ -29,6 +29,10 @@ spring:
       s3:
         bucket: testBucket
 
+storage:
+  profile:
+    directory: ./profile/
+
 jwt:
   secret-key: ${JWT_SECRET_KEY}
   issuer: admin

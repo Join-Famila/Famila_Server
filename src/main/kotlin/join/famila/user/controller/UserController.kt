@@ -7,6 +7,8 @@ import join.famila.user.controller.data.SignInUserRequest
 import join.famila.user.controller.data.SignUpUserRequest
 import join.famila.user.controller.data.UpdateUserRequest
 import join.famila.user.controller.data.UserResponse
+import join.famila.user.service.FileSave
+import join.famila.user.service.ProfileDirectStorageService
 import join.famila.user.service.UserService
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.NO_CONTENT
@@ -29,12 +31,21 @@ import java.util.UUID.randomUUID
 @RequestMapping("api/v1/users")
 class UserController(
     private val userService: UserService,
+
+    private val profileDirectStorageService: FileSave,
 ) {
     @GetMapping("me")
     @ResponseStatus(OK)
     @Tag(name = "로그인 사용자 정보 가져오는 API", description = "헤더로 전달 받은 Authentication 값을 바탕으로 사용자 정보를 가져옴")
     fun getMe(principal: Principal): UserResponse {
-        return userService.get(id = principal.name.toLong()).let(::UserResponse)
+        return userService.get(id = principal.name.toLong()).let {
+            val imageByteArray = it.profile?.let { profile ->
+                profileDirectStorageService is ProfileDirectStorageService
+                profileDirectStorageService.get(profile)
+            }
+
+            UserResponse(user = it, profile = imageByteArray)
+        }
     }
 
     @PostMapping("signIn")
@@ -54,7 +65,14 @@ class UserController(
             )
         }
 
-        return userService.get(request = signInUserRequest).let(::UserResponse)
+        return userService.get(request = signInUserRequest).let {
+            val imageByteArray = it.profile?.let { profile ->
+                profileDirectStorageService is ProfileDirectStorageService
+                profileDirectStorageService.get(profile)
+            }
+
+            UserResponse(user = it, profile = imageByteArray)
+        }
     }
 
     @PostMapping("refresh")
@@ -74,7 +92,7 @@ class UserController(
         }
     }
 
-    @PostMapping(consumes = [MULTIPART_FORM_DATA_VALUE])
+    @PostMapping("signUp", consumes = [MULTIPART_FORM_DATA_VALUE])
     @ResponseStatus(CREATED)
     @Tag(name = "회원가입 API", description = "헤더로 Authentication, refreshToken 과 사용자 정보를 전달")
     fun signUp(
@@ -91,8 +109,15 @@ class UserController(
                 Cookie("identifyCode", randomUUID().toString()).apply { isHttpOnly = true }
             )
         }
+        profileDirectStorageService is ProfileDirectStorageService
 
-        return userService.save(request = request, profile = profile).let(::UserResponse)
+        val fileName = profile?.let { profileDirectStorageService.save(multipartFile = profile) }
+        val imageByteArray = fileName?.let { profileDirectStorageService.get(fileName = fileName) }
+
+        return UserResponse(
+            user = userService.save(request = request, profile = fileName),
+            profile = imageByteArray,
+        )
     }
 
     @PutMapping("{id}", consumes = [MULTIPART_FORM_DATA_VALUE])
@@ -103,6 +128,16 @@ class UserController(
         @RequestPart request: UpdateUserRequest,
         @RequestPart(required = false) profile: MultipartFile?,
     ) {
-        userService.update(id = id, request = request, profile = profile)
+        val fileName = profile?.let {
+            profileDirectStorageService is ProfileDirectStorageService
+
+            userService.get(id = id).profile?.apply {
+                profileDirectStorageService.delete(fileName = this)
+            }
+
+            profileDirectStorageService.save(multipartFile = it)
+        }
+
+        userService.update(id = id, request = request, profile = fileName)
     }
 }

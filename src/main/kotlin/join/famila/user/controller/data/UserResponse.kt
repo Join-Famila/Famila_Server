@@ -1,16 +1,16 @@
 package join.famila.user.controller.data
 
-import java.time.LocalDate
 import join.famila.club.infrastructure.Category
 import join.famila.user.infrastructure.Gender
 import join.famila.user.infrastructure.User
+import java.time.LocalDate
 
 data class UserResponse(
     val id: Long,
 
     val name: String,
 
-    val profile: String,
+    val profile: ByteArray?,
 
     val gender: Gender,
 
@@ -24,10 +24,10 @@ data class UserResponse(
 
     val categories: Set<Category>,
 ) {
-    constructor(user: User) : this(
+    constructor(user: User, profile: ByteArray?) : this(
         id = user.id,
         name = user.name,
-        profile = user.profile,
+        profile = profile,
         gender = user.gender,
         phoneNumber = user.phoneNumber,
         location = user.location.let(::LocationResponse),
