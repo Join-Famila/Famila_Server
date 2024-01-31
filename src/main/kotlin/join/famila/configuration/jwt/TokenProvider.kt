@@ -41,6 +41,8 @@ class TokenProvider(
 
     fun getSubject(token: String, identifyCode: String): String {
         return getClaims(token = token).also {
+            println(it[IDENTIFY_CODE].toString())
+            println(identifyCode)
             check(it[IDENTIFY_CODE].toString() == identifyCode)
         }.subject
     }

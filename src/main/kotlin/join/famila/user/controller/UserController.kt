@@ -3,6 +3,7 @@ package join.famila.user.controller
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
+import join.famila.configuration.jwt.TokenProvider
 import join.famila.user.controller.data.SignInUserRequest
 import join.famila.user.controller.data.SignUpUserRequest
 import join.famila.user.controller.data.UpdateUserRequest
@@ -33,6 +34,8 @@ class UserController(
     private val userService: UserService,
 
     private val profileDirectStorageService: FileSave,
+
+    private val tokenProvider: TokenProvider,
 ) {
     @GetMapping("me")
     @ResponseStatus(OK)
@@ -55,40 +58,25 @@ class UserController(
         @RequestBody signInUserRequest: SignInUserRequest,
         httpServletResponse: HttpServletResponse,
     ): UserResponse {
-        httpServletResponse.apply {
-            addHeader(
-                "Authentication",
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxOlVTRVIiLCJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTUxNjIzOTMyMn0.1JJh--9PzUBQPOzzpSMlhEWs1HuDLq_2NXM5icUgWmo"
-            )
-            addCookie(
-                Cookie("identifyCode", randomUUID().toString()).apply { isHttpOnly = true }
-            )
-        }
-
         return userService.get(request = signInUserRequest).let {
             val imageByteArray = it.profile?.let { profile ->
                 profileDirectStorageService is ProfileDirectStorageService
                 profileDirectStorageService.get(profile)
             }
 
-            UserResponse(user = it, profile = imageByteArray)
-        }
-    }
+            val uuid = randomUUID().toString()
 
-    @PostMapping("refresh")
-    @ResponseStatus(OK)
-    @Tag(name = "토큰 재발급 API", description = "헤더로 Authentication를 전달하면 토큰이 재발급됨")
-    fun refresh(
-        httpServletResponse: HttpServletResponse,
-    ) {
-        httpServletResponse.apply {
-            addHeader(
-                "Authentication",
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxOlVTRVIiLCJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTUxNjIzOTMyMn0.1JJh--9PzUBQPOzzpSMlhEWs1HuDLq_2NXM5icUgWmo"
-            )
-            addCookie(
-                Cookie("identifyCode", randomUUID().toString()).apply { isHttpOnly = true }
-            )
+            httpServletResponse.apply {
+                addHeader(
+                    "Authentication",
+                    tokenProvider.createToken(user = it, uuid = uuid),
+                )
+                addCookie(
+                    Cookie("identifyCode", uuid).apply { isHttpOnly = true },
+                )
+            }
+
+            UserResponse(user = it, profile = imageByteArray)
         }
     }
 
@@ -100,24 +88,26 @@ class UserController(
         @RequestPart profile: MultipartFile?,
         httpServletResponse: HttpServletResponse,
     ): UserResponse {
-        httpServletResponse.apply {
-            addHeader(
-                "Authentication",
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxOlVTRVIiLCJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTUxNjIzOTMyMn0.1JJh--9PzUBQPOzzpSMlhEWs1HuDLq_2NXM5icUgWmo"
-            )
-            addCookie(
-                Cookie("identifyCode", randomUUID().toString()).apply { isHttpOnly = true }
-            )
-        }
         profileDirectStorageService is ProfileDirectStorageService
 
         val fileName = profile?.let { profileDirectStorageService.save(multipartFile = profile) }
         val imageByteArray = fileName?.let { profileDirectStorageService.get(fileName = fileName) }
 
-        return UserResponse(
-            user = userService.save(request = request, profile = fileName),
-            profile = imageByteArray,
-        )
+        return userService.save(request = request, profile = fileName).let {
+            httpServletResponse.apply {
+                val uuid = randomUUID().toString()
+
+                addHeader(
+                    "Authentication",
+                    tokenProvider.createToken(user = it, uuid = uuid),
+                )
+                addCookie(
+                    Cookie("identifyCode", uuid).apply { isHttpOnly = true },
+                )
+            }
+
+            UserResponse(user = it, profile = imageByteArray)
+        }
     }
 
     @PutMapping("{id}", consumes = [MULTIPART_FORM_DATA_VALUE])
